@@ -1,0 +1,35 @@
+# columnas_map.yaml
+# Mapa de columnas para normalizar datasets al esquema común interno
+#
+# Esquema común interno:
+#   titulo          → nombre de la serie
+#   score           → puntuación (TARGET — lo que predecimos)
+#   generos         → géneros separados por coma
+#   clasificacion   → clasificación de edad
+#   votos           → número de usuarios que puntuaron
+#   duracion_ep     → duración por episodio
+#   anio_inicio     → año de estreno (requiere extracción en el pipeline)
+#
+# Columnas SIN equivalente entre datasets:
+#   anime.csv       → Episodes, Type, Studios, Source, Ranked, Popularity
+#   series_data.csv → No_of_Episodes (no existe), Overview, Star1-4
+
+anime:
+  Name:       titulo
+  Score:      score           # rango 1.85–10, valores "Unknown" → tratar como NaN
+  Genres:     generos         # formato: "Action, Adventure, Comedy"
+  Rating:     clasificacion   # clasificación de edad (R-17+, PG-13, etc.)
+  Members:    votos           # número de usuarios que tienen la serie en su lista
+  Duration:   duracion_ep     # formato: "24 min. per ep." → limpiar en pipeline
+  Premiered:  anio_inicio     # formato: "Spring 1998" → extraer año en pipeline
+  Episodes:   episodios       # número de episodios — sin equivalente en series_data
+  Type:       tipo            # TV, Movie, OVA... — sin equivalente en series_data
+
+series_data:
+  Series_Title:          titulo
+  IMDB_Rating:           score           # rango 1.0–9.7, escala compatible con anime
+  Genre:                 generos         # formato: "Action, Adventure, Drama"
+  Certificate:           clasificacion   # clasificación de edad (18, PG, R, etc.)
+  No_of_Votes:           votos           # número de votos en IMDb
+  Runtime_of_Episodes:   duracion_ep     # formato: "57 min" → limpiar en pipeline
+  Runtime_of_Series:     anio_inicio     # formato: "(2011–2019)" → extraer año en pipeline
